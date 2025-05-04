@@ -1,13 +1,15 @@
+'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
+import { SupportPointsOverviewView } from '@/types/supabase'
 
 export default function SupportPointDashboard() {
-  const [overview, setOverview] = useState([])
+  const [overview, setOverview] = useState<SupportPointsOverviewView[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase.from('support_points_overview_view').select('*')
-      if (!error) setOverview(data)
+      if (!error && data) setOverview(data)
     }
     fetchData()
   }, [])

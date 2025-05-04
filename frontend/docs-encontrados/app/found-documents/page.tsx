@@ -1,13 +1,15 @@
+'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
+import { FoundDocument } from '@/types/supabase'
 
 export default function FoundDocuments() {
-  const [docs, setDocs] = useState([])
+  const [docs, setDocs] = useState<FoundDocument[]>([])
 
   useEffect(() => {
     const fetchDocs = async () => {
       const { data, error } = await supabase.from('found_documents_summary_view').select('*')
-      if (!error) setDocs(data)
+      if (!error && data) setDocs(data)
     }
     fetchDocs()
   }, [])

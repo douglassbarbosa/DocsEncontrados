@@ -1,5 +1,6 @@
+'use client'
 import { useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 export default function LostDocuments() {
   const [docData, setDocData] = useState({
@@ -10,15 +11,15 @@ export default function LostDocuments() {
     lost_location: ''
   })
 
-  const handleChange = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDocData({ ...docData, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = async () => {
-    const user = supabase.auth.getUser()
+    const user = await supabase.auth.getUser()
     const { error } = await supabase.from('lost_documents').insert({
       ...docData,
-      owner_id: (await user).data.user.id
+      owner_id: user.data.user?.id
     })
     if (error) alert('Erro: ' + error.message)
     else alert('Documento perdido cadastrado.')
